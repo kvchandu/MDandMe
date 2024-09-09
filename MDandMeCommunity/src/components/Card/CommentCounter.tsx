@@ -4,17 +4,25 @@ import { Feather } from "@expo/vector-icons";
 
 type CommentCounterProps = {
   initialCount: number;
+  onCommentClick: (post_url: string) => void;
 };
 
-const CommentCounter = ({ initialCount }: CommentCounterProps) => {
+const CommentCounter = ({
+  initialCount,
+  onCommentClick,
+}: CommentCounterProps) => {
   const [count, setCount] = useState(initialCount);
+
+  const handleClick = () => {
+    onCommentClick();
+  };
 
   useEffect(() => {
     setCount(initialCount);
   }, [initialCount]);
 
   return (
-    <TouchableOpacity style={[styles.container]}>
+    <TouchableOpacity style={[styles.container]} onPress={handleClick}>
       <Feather name="message-square" size={24} color="black" />
       <Text>{count}</Text>
     </TouchableOpacity>

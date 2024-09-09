@@ -5,7 +5,12 @@ import CommentSection from "./src/components/CommentScreen/CommentSection";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Home: undefined;
+  Comments: { post_url: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
@@ -14,7 +19,7 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={PostList}
-          options={{ title: "Communtiy" }}
+          options={{ title: "Community" }}
         />
         <Stack.Screen name="Comments" component={CommentSection} />
       </Stack.Navigator>
