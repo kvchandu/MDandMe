@@ -1,4 +1,4 @@
-import Post from "./Post";
+import Post from "./Card/Post";
 import { FlatList, Text, View, StyleSheet } from "react-native";
 import { PostItem } from "../types/PostItem";
 import { useEffect, useState } from "react";
@@ -82,6 +82,32 @@ const PostList = () => {
     setLoading(false);
   }, []);
 
+  const handleHug = async (post_url: string, newHugCount: number) => {
+    // Update local state
+    setData((prevData) =>
+      prevData.map((post) =>
+        post.post_url === post_url ? { ...post, num_hugs: newHugCount } : post
+      )
+    );
+
+    // Send update to server
+    try {
+      const response = await fetch(`${API_URL}/hug`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ post_url, num_hugs: newHugCount }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update hug count on server");
+      }
+    } catch (error) {
+      console.error("Error updating hug count:", error);
+      // Optionally, revert the local state change if the server update fails
+    }
+  };
+
   const fetchData = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
@@ -105,6 +131,7 @@ const PostList = () => {
       created_at={item.created_at}
       num_hugs={item.num_hugs}
       patient_description={item.patient_description}
+      onHug={handleHug}
     />
   );
 
