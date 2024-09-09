@@ -125,25 +125,46 @@ const PostList = () => {
   };
 
   const _renderItem = ({ item }: { item: PostItem }) => (
-    <Post
-      post_url={item.post_url}
-      title={item.title}
-      created_at={item.created_at}
-      num_hugs={item.num_hugs}
-      patient_description={item.patient_description}
-      onHug={handleHug}
-    />
+    <View style={styles.itemContainer}>
+      <Post
+        post_url={item.post_url}
+        title={item.title}
+        created_at={item.created_at}
+        num_hugs={item.num_hugs}
+        patient_description={item.patient_description}
+        num_comments={Object.keys(item.comments).length}
+        onHug={handleHug}
+      />
+    </View>
   );
+
+  const ItemSeparator = () => <View style={styles.separator} />;
 
   return (
     <FlatList
+      style={styles.root}
       data={data}
       renderItem={_renderItem}
       keyExtractor={(item) => item.post_url}
       onEndReached={fetchData}
       onEndReachedThreshold={0.5}
+      ItemSeparatorComponent={ItemSeparator}
+      contentContainerStyle={styles.listContainer}
     />
   );
 };
 
+const styles = StyleSheet.create({
+  root: {
+    backgroundColor: "#75746f",
+  },
+  listContainer: { paddingVertical: 20, paddingHorizontal: 5 },
+  separator: {
+    height: 10, // Height of the separator
+    backgroundColor: "transparent",
+  },
+  itemContainer: {
+    marginBottom: 5,
+  },
+});
 export default PostList;

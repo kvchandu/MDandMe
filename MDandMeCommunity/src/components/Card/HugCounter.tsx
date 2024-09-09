@@ -29,6 +29,7 @@ const HugCounter = ({ initialCount, onHug }: HugCounterProps) => {
         size={24}
         color={isHugged ? "red" : "black"}
       />
+
       <Text>{count}</Text>
     </TouchableOpacity>
   );
