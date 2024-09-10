@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 type HugCounterProps = {
   initialCount: number;
-  onHug: (newCount: number) => void;
+  onHug: (newCount: number, isHugged: boolean) => void;
 };
 
 const HugCounter = ({ initialCount, onHug }: HugCounterProps) => {
@@ -15,7 +15,7 @@ const HugCounter = ({ initialCount, onHug }: HugCounterProps) => {
     const newCount = isHugged ? count - 1 : count + 1;
     setCount(newCount);
     setIsHugged(!isHugged);
-    onHug(newCount);
+    onHug(newCount, !isHugged);
   };
 
   useEffect(() => {

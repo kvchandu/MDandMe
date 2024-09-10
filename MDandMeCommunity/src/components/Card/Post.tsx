@@ -10,7 +10,7 @@ type PostProps = {
   num_hugs: number;
   patient_description: string;
   num_comments: number;
-  onHug: (post_url: string, newHugCount: number) => void;
+  onHug: (post_url: string, newHugCount: number, isHugged: boolean) => void;
   onCommentClick: (post_url: string) => void;
 };
 
@@ -24,8 +24,8 @@ const Post = ({
   onHug,
   onCommentClick,
 }: PostProps) => {
-  const handleHug = (newCount: number) => {
-    onHug(post_url, newCount);
+  const handleHug = (newCount: number, isHugged: boolean) => {
+    onHug(post_url, newCount, isHugged);
   };
   const handleCommentClick = () => {
     onCommentClick(post_url);

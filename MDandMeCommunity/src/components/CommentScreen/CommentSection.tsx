@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import { useEffect, useState } from "react";
 import { PostItem } from "../../types/PostItem";
 import HugCounter from "../Card/HugCounter";
+import Description from "./Description";
+import Assessment from "./Assessment";
 
 type CommentSectionRouteProp = RouteProp<RootStackParamList, "Comments">;
 
@@ -15,7 +17,9 @@ const CommentSection = ({ route }: CommentSectionProps) => {
   const API_URL = "http://0.0.0.0:8000";
 
   const [postData, setPostData] = useState<PostItem>();
-  const { post_url } = route.params;
+  const { post_url, initialIsHugged } = route.params;
+
+  console.log("Hug Status in Comment Section", initialIsHugged);
 
   useEffect(() => {
     getPostData();
@@ -54,21 +58,50 @@ const CommentSection = ({ route }: CommentSectionProps) => {
   };
 
   return (
-    <View>
+    <ScrollView>
       <Text style={styles.title}>
         {postData ? postData["title"] : "No Data Found"}
       </Text>
-      <HugCounter
-        initialCount={postData ? postData["num_hugs"] : 0}
-        onHug={handleHug}
+
+      <Description
+        description={postData ? postData["patient_description"] : ""}
       />
-    </View>
+      <View style={styles.buttonRow}>
+        <HugCounter
+          initialCount={postData ? postData["num_hugs"] : 0}
+          onHug={handleHug}
+        />
+        <Text>Share Button</Text>
+      </View>
+
+      <Assessment assessment={postData ? postData["assessment"] : ""} />
+
+      {/* <Text style={styles.assessment}>
+        {postData ? postData["assessment"] : ""}
+      </Text> */}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   title: {
     fontSize: 35,
+  },
+  description: {
+    marginTop: 15,
+    marginBottom: 15,
+    borderWidth: 3,
+    fontSize: 18,
+  },
+  assessment: {
+    marginTop: 15,
+    marginBottom: 15,
+    borderWidth: 3,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
 });
 

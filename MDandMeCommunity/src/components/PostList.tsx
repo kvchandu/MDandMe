@@ -51,18 +51,37 @@ const PostList = () => {
     }
   };
 
-  const navigateToComment = (post_url: string) => {
-    setLastViewedPostUrl(post_url);
-    navigation.navigate("Comments", { post_url: post_url });
+  const getHugStatus = (post_url: string): boolean => {
+    const post = data.find((item) => item.post_url === post_url);
+    return post ? post.is_hugged : false;
   };
 
-  const handleHug = async (post_url: string, newHugCount: number) => {
-    // Update local state
+  const navigateToComment = (post_url: string) => {
+    setLastViewedPostUrl(post_url);
+    console.log("Post URL before navigation: ", post_url);
+    const post = data.find((item) => item.post_url === post_url);
+    console.log(post);
+    console.log("Hug Status before navigation: ", getHugStatus(post_url));
+    navigation.navigate("Comments", {
+      post_url: post_url,
+      initialIsHugged: getHugStatus(post_url),
+    });
+  };
+
+  const handleHug = async (
+    post_url: string,
+    newHugCount: number,
+    isHugged: boolean
+  ) => {
     setData((prevData) =>
       prevData.map((post) =>
-        post.post_url === post_url ? { ...post, num_hugs: newHugCount } : post
+        post.post_url === post_url
+          ? { ...post, num_hugs: newHugCount, is_hugged: isHugged }
+          : post
       )
     );
+
+    console.log("Is Hugged Status in Handle Hug: ", isHugged);
 
     // Send update to server
     try {

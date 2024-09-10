@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
   Home: undefined;
-  Comments: { post_url: string };
+  Comments: { post_url: string; initialIsHugged: boolean };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
