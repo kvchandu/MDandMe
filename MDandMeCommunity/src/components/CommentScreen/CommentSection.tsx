@@ -1,6 +1,9 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
+import { useEffect, useState } from "react";
+import { PostItem } from "../../types/PostItem";
+import HugCounter from "../Card/HugCounter";
 
 type CommentSectionRouteProp = RouteProp<RootStackParamList, "Comments">;
 
@@ -9,12 +12,64 @@ type CommentSectionProps = {
 };
 
 const CommentSection = ({ route }: CommentSectionProps) => {
+  const API_URL = "http://0.0.0.0:8000";
+
+  const [postData, setPostData] = useState<PostItem>();
   const { post_url } = route.params;
+
+  useEffect(() => {
+    getPostData();
+  }, []);
+
+  const handleHug = async (newHugCount: number) => {
+    try {
+      const response = await fetch(`${API_URL}/items/hug`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ post_url, num_hugs: newHugCount }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update hug count on server");
+      }
+    } catch (error) {
+      console.error("Error updating hug count:", error);
+      // Optionally, revert the local state change if the server update fails
+    }
+  };
+
+  const getPostData = async () => {
+    try {
+      const encodedPostUrl = encodeURIComponent(post_url);
+      const response = await fetch(
+        `${API_URL}/get-post?post_url=${encodedPostUrl}`
+      );
+      const json = await response.json();
+      setPostData(json);
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  };
+
   return (
     <View>
-      <Text>{post_url}</Text>
+      <Text style={styles.title}>
+        {postData ? postData["title"] : "No Data Found"}
+      </Text>
+      <HugCounter
+        initialCount={postData ? postData["num_hugs"] : 0}
+        onHug={handleHug}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 35,
+  },
+});
 
 export default CommentSection;

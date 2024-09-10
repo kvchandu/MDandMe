@@ -1,17 +1,24 @@
 import Post from "./Card/Post";
 import { FlatList, Text, View, StyleSheet } from "react-native";
 import { PostItem } from "../types/PostItem";
-import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState, useCallback } from "react";
+import {
+  useNavigation,
+  useFocusEffect,
+  useIsFocused,
+} from "@react-navigation/native";
 
 const PostList = () => {
   const navigation = useNavigation();
+
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [data, setData] = useState<any[]>([]);
+  const [lastViewedPostUrl, setLastViewedPostUrl] = useState<string | null>("");
+  const isFocused = useIsFocused();
 
-  const API_URL = "http://0.0.0.0:8000/items";
+  const API_URL = "http://0.0.0.0:8000";
 
   useEffect(() => {
     setLoading(true);
@@ -19,8 +26,33 @@ const PostList = () => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    if (isFocused && lastViewedPostUrl) {
+      updatePost(lastViewedPostUrl);
+      setLastViewedPostUrl(null);
+    }
+  }, [isFocused, lastViewedPostUrl]);
+
+  const updatePost = async (post_url: string) => {
+    try {
+      const encodedPostUrl = encodeURIComponent(post_url);
+      const response = await fetch(
+        `${API_URL}/get-post?post_url=${encodedPostUrl}`
+      );
+      const updatedPost = await response.json();
+
+      setData((prevData) =>
+        prevData.map((post) =>
+          post.post_url === post_url ? { ...post, ...updatedPost } : post
+        )
+      );
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  };
+
   const navigateToComment = (post_url: string) => {
-    console.log(post_url);
+    setLastViewedPostUrl(post_url);
     navigation.navigate("Comments", { post_url: post_url });
   };
 
@@ -34,7 +66,7 @@ const PostList = () => {
 
     // Send update to server
     try {
-      const response = await fetch(`${API_URL}/hug`, {
+      const response = await fetch(`${API_URL}/items/hug`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +86,9 @@ const PostList = () => {
     if (loading || !hasMore) return;
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}?page=${page}&items_per_page=10`);
+      const response = await fetch(
+        `${API_URL}/items?page=${page}&items_per_page=10`
+      );
       const json = await response.json();
       setData([...data, ...json.items]);
       setPage(page + 1);

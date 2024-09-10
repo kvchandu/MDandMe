@@ -4,7 +4,7 @@ import { Feather } from "@expo/vector-icons";
 
 type CommentCounterProps = {
   initialCount: number;
-  onCommentClick: (post_url: string) => void;
+  onCommentClick: () => void;
 };
 
 const CommentCounter = ({
