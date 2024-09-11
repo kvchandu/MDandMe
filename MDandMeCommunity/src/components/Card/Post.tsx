@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
 import HugCounter from "./HugCounter";
 import { useState } from "react";
 import CommentCounter from "./CommentCounter";
@@ -11,6 +11,7 @@ type PostProps = {
   patient_description: string;
   num_comments: number;
   onHug: (post_url: string, newHugCount: number, isHugged: boolean) => void;
+  isHugged: boolean;
   onCommentClick: (post_url: string) => void;
 };
 
@@ -22,6 +23,7 @@ const Post = ({
   patient_description,
   num_comments,
   onHug,
+  isHugged,
   onCommentClick,
 }: PostProps) => {
   const handleHug = (newCount: number, isHugged: boolean) => {
@@ -31,24 +33,48 @@ const Post = ({
     onCommentClick(post_url);
   };
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  const previewLength = 250;
+
+  const previewText =
+    patient_description.length > previewLength
+      ? patient_description.slice(0, previewLength) + "..."
+      : patient_description;
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      {/* <Text style={styles.date}>
+    <TouchableOpacity onPress={toggleExpand}>
+      <View style={styles.container}>
+        <Text style={styles.title}>{title}</Text>
+        {/* <Text style={styles.date}>
         {new Date(created_at).toLocaleDateString()}
       </Text>
       <Text style={styles.hugs}>Hugs: {num_hugs}</Text> */}
-      <Text style={styles.description} numberOfLines={3}>
-        {patient_description}
-      </Text>
-      <View style={styles.bottomRow}>
-        <HugCounter initialCount={num_hugs} onHug={handleHug} />
-        <CommentCounter
-          initialCount={num_comments}
-          onCommentClick={handleCommentClick}
-        />
+        {/* <Text style={styles.description} numberOfLines={3}>
+          {patient_description}
+        </Text> */}
+        <Text style={styles.description}>
+          {isExpanded ? patient_description : previewText}
+        </Text>
+        <Text style={styles.expandButton}>
+          {isExpanded ? "Show less" : "Read more"}
+        </Text>
+        <View style={styles.bottomRow}>
+          <HugCounter
+            initialCount={num_hugs}
+            hugStatus={isHugged}
+            onHug={handleHug}
+          />
+          <CommentCounter
+            initialCount={num_comments}
+            onCommentClick={handleCommentClick}
+          />
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -83,6 +109,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
+  },
+  expandButton: {
+    color: "blue",
+    marginTop: 5,
+    textAlign: "right",
   },
 });
 

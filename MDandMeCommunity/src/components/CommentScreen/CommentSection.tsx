@@ -19,7 +19,7 @@ const CommentSection = ({ route }: CommentSectionProps) => {
   const [postData, setPostData] = useState<PostItem>();
   const { post_url, initialIsHugged } = route.params;
 
-  console.log("Hug Status in Comment Section", initialIsHugged);
+  // console.log("Hug Status in Comment Section", initialIsHugged);
 
   useEffect(() => {
     getPostData();
@@ -69,16 +69,13 @@ const CommentSection = ({ route }: CommentSectionProps) => {
       <View style={styles.buttonRow}>
         <HugCounter
           initialCount={postData ? postData["num_hugs"] : 0}
+          hugStatus={initialIsHugged}
           onHug={handleHug}
         />
         <Text>Share Button</Text>
       </View>
 
       <Assessment assessment={postData ? postData["assessment"] : ""} />
-
-      {/* <Text style={styles.assessment}>
-        {postData ? postData["assessment"] : ""}
-      </Text> */}
     </ScrollView>
   );
 };

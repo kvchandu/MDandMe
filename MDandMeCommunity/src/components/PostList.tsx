@@ -15,7 +15,12 @@ const PostList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [data, setData] = useState<any[]>([]);
-  const [lastViewedPostUrl, setLastViewedPostUrl] = useState<string | null>("");
+  const [lastViewedPostUrl, setLastViewedPostUrl] = useState<string | null>(
+    null
+  );
+  const [lastViewedNumHugs, setLastViewedNumHugs] = useState<number | null>(
+    null
+  );
   const isFocused = useIsFocused();
 
   const API_URL = "http://0.0.0.0:8000";
@@ -27,11 +32,14 @@ const PostList = () => {
   }, []);
 
   useEffect(() => {
-    if (isFocused && lastViewedPostUrl) {
+    if (isFocused && lastViewedPostUrl && lastViewedNumHugs) {
+      console.log(lastViewedNumHugs);
+      console.log(getNumHugs(lastViewedPostUrl));
       updatePost(lastViewedPostUrl);
       setLastViewedPostUrl(null);
+      setLastViewedNumHugs(null);
     }
-  }, [isFocused, lastViewedPostUrl]);
+  }, [isFocused, lastViewedPostUrl, lastViewedNumHugs]);
 
   const updatePost = async (post_url: string) => {
     try {
@@ -56,12 +64,17 @@ const PostList = () => {
     return post ? post.is_hugged : false;
   };
 
+  const getNumHugs = (post_url: string): number => {
+    const post = data.find((item) => item.post_url === post_url);
+    return post ? post.num_hugs : null;
+  };
+
   const navigateToComment = (post_url: string) => {
     setLastViewedPostUrl(post_url);
-    console.log("Post URL before navigation: ", post_url);
-    const post = data.find((item) => item.post_url === post_url);
-    console.log(post);
-    console.log("Hug Status before navigation: ", getHugStatus(post_url));
+    setLastViewedNumHugs(getNumHugs(post_url));
+
+    // console.log("Post Hugs before navigation: ", lastViewedNumHugs);
+
     navigation.navigate("Comments", {
       post_url: post_url,
       initialIsHugged: getHugStatus(post_url),
@@ -129,6 +142,7 @@ const PostList = () => {
         patient_description={item.patient_description}
         num_comments={Object.keys(item.comments).length}
         onHug={handleHug}
+        isHugged={item.is_hugged ? item.is_hugged : false}
         onCommentClick={navigateToComment}
       />
     </View>

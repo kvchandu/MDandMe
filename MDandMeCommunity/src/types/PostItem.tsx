@@ -7,4 +7,5 @@ export type PostItem = {
   assessment: string;
   question: string;
   comments: Record<string, any>;
+  is_hugged: boolean | null;
 };
