@@ -32,14 +32,11 @@ const PostList = () => {
   }, []);
 
   useEffect(() => {
-    if (isFocused && lastViewedPostUrl && lastViewedNumHugs) {
-      console.log(lastViewedNumHugs);
-      console.log(getNumHugs(lastViewedPostUrl));
+    if (isFocused && lastViewedPostUrl) {
       updatePost(lastViewedPostUrl);
       setLastViewedPostUrl(null);
-      setLastViewedNumHugs(null);
     }
-  }, [isFocused, lastViewedPostUrl, lastViewedNumHugs]);
+  }, [isFocused, lastViewedPostUrl]);
 
   const updatePost = async (post_url: string) => {
     try {
@@ -71,9 +68,6 @@ const PostList = () => {
 
   const navigateToComment = (post_url: string) => {
     setLastViewedPostUrl(post_url);
-    setLastViewedNumHugs(getNumHugs(post_url));
-
-    // console.log("Post Hugs before navigation: ", lastViewedNumHugs);
 
     navigation.navigate("Comments", {
       post_url: post_url,

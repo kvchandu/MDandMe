@@ -6,6 +6,6 @@ export type PostItem = {
   patient_description: string;
   assessment: string;
   question: string;
-  comments: Record<string, any>;
+  comments: object;
   is_hugged: boolean | null;
 };

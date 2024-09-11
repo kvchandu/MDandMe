@@ -6,6 +6,7 @@ import { PostItem } from "../../types/PostItem";
 import HugCounter from "../Card/HugCounter";
 import Description from "./Description";
 import Assessment from "./Assessment";
+import CommentBox from "./CommentBox";
 
 type CommentSectionRouteProp = RouteProp<RootStackParamList, "Comments">;
 
@@ -17,15 +18,17 @@ const CommentSection = ({ route }: CommentSectionProps) => {
   const API_URL = "http://0.0.0.0:8000";
 
   const [postData, setPostData] = useState<PostItem>();
-  const { post_url, initialIsHugged } = route.params;
+  const { post_url, initialIsHugged, onHugStatusChange } = route.params;
 
+  console.log(postData ? typeof postData["comments"] : "None");
   // console.log("Hug Status in Comment Section", initialIsHugged);
 
   useEffect(() => {
     getPostData();
   }, []);
 
-  const handleHug = async (newHugCount: number) => {
+  const handleHug = async (newHugCount: number, newHugStatus: boolean) => {
+    console.log("In handleHug function CommentSection");
     try {
       const response = await fetch(`${API_URL}/items/hug`, {
         method: "POST",
@@ -76,6 +79,7 @@ const CommentSection = ({ route }: CommentSectionProps) => {
       </View>
 
       <Assessment assessment={postData ? postData["assessment"] : ""} />
+      <CommentBox comments={postData ? postData["comments"] : {}} />
     </ScrollView>
   );
 };
