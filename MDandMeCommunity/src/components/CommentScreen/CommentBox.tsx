@@ -1,22 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import Comment from "./Comment";
 import { CommentData } from "../../types/CommentData";
 
 type CommentBoxProps = {
-  comments: { [key: string]: CommentData };
+  initialComments: { [key: string]: CommentData };
+  postUrl: string;
 };
 
-const CommentBox = ({ comments }: CommentBoxProps) => {
+const CommentBox = ({ initialComments, postUrl }: CommentBoxProps) => {
+  const [comments, setComments] = useState(initialComments);
+
+  useEffect(() => {
+    setComments(initialComments);
+  }, [initialComments]);
+
   const renderComments = (parentId: number | null, level: number) => {
-    console.log(parentId, level);
     return Object.values(comments)
       .filter((comment) => comment.parent_id === parentId)
       .map((comment) => (
         <View key={comment.id} style={{ marginLeft: level * 20 }}>
-          <Comment comment={comment} comments={comments} level={level} />
+          <Comment
+            postUrl={postUrl}
+            comment={comment}
+            comments={comments}
+            level={level}
+            onAddReply={addReply}
+          />
         </View>
       ));
+  };
+
+  const addReply = (newComment: CommentData) => {
+    setComments((prevComments) => ({
+      ...prevComments,
+      [newComment.id]: newComment,
+    }));
   };
 
   return (

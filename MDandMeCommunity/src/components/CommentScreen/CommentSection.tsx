@@ -79,7 +79,10 @@ const CommentSection = ({ route }: CommentSectionProps) => {
       </View>
 
       <Assessment assessment={postData ? postData["assessment"] : ""} />
-      <CommentBox comments={postData ? postData["comments"] : {}} />
+      <CommentBox
+        initialComments={postData ? postData["comments"] : {}}
+        postUrl={post_url}
+      />
     </ScrollView>
   );
 };

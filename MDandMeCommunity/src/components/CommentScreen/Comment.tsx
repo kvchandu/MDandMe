@@ -1,21 +1,90 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { CommentData } from "../../types/Comment";
-import { useState } from "react";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Button,
+} from "react-native";
+import { CommentData } from "../../types/CommentData";
 
 type CommentProps = {
+  postUrl: string;
   comment: CommentData;
   comments: { [key: string]: CommentData };
   level?: number;
+  onAddReply: (newComment: CommentData) => void;
 };
 
-const Comment = ({ comment, comments, level = 0 }: CommentProps) => {
+const Comment = ({
+  postUrl,
+  comment,
+  comments,
+  level = 0,
+  onAddReply,
+}: CommentProps) => {
+  const API_URL = "http://0.0.0.0:8000/add-comment";
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [replyName, setReplyName] = useState("");
+
   const childComments = Object.values(comments).filter(
     (c) => c.parent_id === comment.id
   );
 
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
+  };
+
+  const handleReply = () => {
+    setIsReplying(true);
+  };
+
+  const submitReply = async () => {
+    if (replyText.trim() === "" || replyName.trim() === "") {
+      alert("Please enter both a name and a comment.");
+      return;
+    }
+
+    const newComment: CommentData = {
+      id: Date.now(), // Temporary ID, will be replaced by the server
+      parent_id: comment.id,
+      display_name: replyName,
+      text: replyText,
+      created_at: new Date().toISOString(),
+    };
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          post_url: postUrl,
+          parent_id: comment.id,
+          display_name: replyName,
+          text: replyText,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit comment");
+      }
+
+      const data = await response.json();
+      newComment.id = data.id; // Update with the server-generated ID
+
+      onAddReply(newComment);
+      setIsReplying(false);
+      setReplyText("");
+      setReplyName("");
+    } catch (error) {
+      console.error("Error submitting reply:", error);
+      alert("Failed to submit reply. Please try again.");
+    }
   };
 
   return (
@@ -36,29 +105,50 @@ const Comment = ({ comment, comments, level = 0 }: CommentProps) => {
           </Text>
         </View>
       </TouchableOpacity>
-      {!isMinimized &&
-        childComments.map((childComment) => (
-          <Comment
-            key={childComment.id}
-            comment={childComment}
-            comments={comments}
-            level={level + 1}
-          />
-        ))}
+
+      {!isMinimized && (
+        <>
+          {!isReplying ? (
+            <TouchableOpacity onPress={handleReply} style={styles.replyButton}>
+              <Text style={styles.replyButtonText}>Reply</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.replyContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Your name"
+                value={replyName}
+                onChangeText={setReplyName}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Your reply"
+                value={replyText}
+                onChangeText={setReplyText}
+                multiline
+              />
+              <Button title="Submit Reply" onPress={submitReply} />
+              <Button title="Cancel" onPress={() => setIsReplying(false)} />
+            </View>
+          )}
+
+          {childComments.map((childComment) => (
+            <Comment
+              postUrl={postUrl}
+              key={childComment.id}
+              comment={childComment}
+              comments={comments}
+              level={level + 1}
+              onAddReply={onAddReply}
+            />
+          ))}
+        </>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
   commentContainer: {
     backgroundColor: "#f0f0f0",
     padding: 12,
@@ -79,6 +169,24 @@ const styles = StyleSheet.create({
   minimizeIndicator: {
     color: "#007AFF",
     marginTop: 4,
+  },
+  replyButton: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  replyButtonText: {
+    color: "#007AFF",
+  },
+  replyContainer: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
   },
 });
 
