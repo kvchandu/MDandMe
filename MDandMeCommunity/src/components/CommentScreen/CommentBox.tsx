@@ -1,5 +1,6 @@
 import { FlatList } from "react-native";
 import Comment from "./Comment";
+import { CommentData } from "../../types/CommentData";
 
 type CommentBoxProps = {
   comments: object;
