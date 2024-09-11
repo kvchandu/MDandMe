@@ -1,3 +1,5 @@
+import { CommentData } from "./CommentData";
+
 export type PostItem = {
   post_url: string;
   title: string;
@@ -6,6 +8,6 @@ export type PostItem = {
   patient_description: string;
   assessment: string;
   question: string;
-  comments: object;
+  comments: { [key: string]: CommentData };
   is_hugged: boolean | null;
 };
