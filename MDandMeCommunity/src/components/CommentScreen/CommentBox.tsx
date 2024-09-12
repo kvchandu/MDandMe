@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, View, StyleSheet, Text } from "react-native";
 import Comment from "./Comment";
 import { CommentData } from "../../types/CommentData";
+import palette from "../../assets/colors";
 
 type CommentBoxProps = {
   initialComments: { [key: string]: CommentData };
@@ -57,7 +58,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: palette.PRIMARY,
   },
+
   emptyStateContainer: {
     flex: 1,
     justifyContent: "center",

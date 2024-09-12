@@ -87,12 +87,19 @@ const Comment = ({
       alert("Failed to submit reply. Please try again.");
     }
   };
-
+  {
+    /* <Text style={styles.minimizeIndicator}>
+              
+            </Text> */
+  }
   return (
     <View style={{ marginLeft: level * 20 }}>
       <TouchableOpacity onPress={toggleMinimize}>
         <View style={styles.commentContainer}>
-          <Text style={styles.authorName}>{comment.display_name}</Text>
+          <Text style={styles.authorName}>
+            {comment.display_name}
+            {isMinimized ? "  ▼ " : "  ▲ "}
+          </Text>
           {!isMinimized && (
             <>
               <Text style={styles.commentText}>{comment.text}</Text>
@@ -101,38 +108,47 @@ const Comment = ({
               </Text>
             </>
           )}
-          <Text style={styles.minimizeIndicator}>
-            {isMinimized ? "▼ Show More" : "▲ Show Less"}
-          </Text>
+
+          {!isMinimized && (
+            <View style={styles.bottomRow}>
+              <>
+                {!isReplying ? (
+                  <TouchableOpacity
+                    onPress={handleReply}
+                    style={styles.replyButton}
+                  >
+                    <Text style={styles.replyButtonText}>Reply</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={styles.replyContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Your name"
+                      value={replyName}
+                      onChangeText={setReplyName}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Your reply"
+                      value={replyText}
+                      onChangeText={setReplyText}
+                      multiline
+                    />
+                    <Button title="Submit Reply" onPress={submitReply} />
+                    <Button
+                      title="Cancel"
+                      onPress={() => setIsReplying(false)}
+                    />
+                  </View>
+                )}
+              </>
+            </View>
+          )}
         </View>
       </TouchableOpacity>
 
       {!isMinimized && (
         <>
-          {!isReplying ? (
-            <TouchableOpacity onPress={handleReply} style={styles.replyButton}>
-              <Text style={styles.replyButtonText}>Reply</Text>
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.replyContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Your name"
-                value={replyName}
-                onChangeText={setReplyName}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Your reply"
-                value={replyText}
-                onChangeText={setReplyText}
-                multiline
-              />
-              <Button title="Submit Reply" onPress={submitReply} />
-              <Button title="Cancel" onPress={() => setIsReplying(false)} />
-            </View>
-          )}
-
           {childComments.map((childComment) => (
             <Comment
               postUrl={postUrl}
@@ -172,15 +188,15 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   replyButton: {
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: 4,
+    // marginBottom: 8,
   },
   replyButtonText: {
     color: "#007AFF",
   },
   replyContainer: {
-    marginTop: 8,
-    marginBottom: 8,
+    // marginTop: 8,
+    // marginBottom: 8,
   },
   input: {
     borderWidth: 1,
@@ -188,6 +204,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 8,
     marginBottom: 8,
+  },
+  bottomRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });
 
