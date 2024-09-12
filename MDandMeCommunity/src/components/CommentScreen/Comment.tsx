@@ -76,7 +76,7 @@ const Comment = ({
       }
 
       const data = await response.json();
-      newComment.id = data.id; // Update with the server-generated ID
+      newComment.id = data.comment_id;
 
       onAddReply(newComment);
       setIsReplying(false);

@@ -20,15 +20,16 @@ const CommentBox = ({ initialComments, postUrl }: CommentBoxProps) => {
     return Object.values(comments)
       .filter((comment) => comment.parent_id === parentId)
       .map((comment) => (
-        <View key={comment.id} style={{ marginLeft: level * 20 }}>
-          <Comment
-            postUrl={postUrl}
-            comment={comment}
-            comments={comments}
-            level={level}
-            onAddReply={addReply}
-          />
-        </View>
+        // <View style={{ marginLeft: level * 20 }}>
+        <Comment
+          key={comment.id.toString()}
+          postUrl={postUrl}
+          comment={comment}
+          comments={comments}
+          level={level}
+          onAddReply={addReply}
+        />
+        // </View>
       ));
   };
 
