@@ -1,6 +1,7 @@
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import palette from "../../assets/colors";
 
 type HugCounterProps = {
   initialCount: number;
@@ -29,7 +30,7 @@ const HugCounter = ({ initialCount, hugStatus, onHug }: HugCounterProps) => {
         <Ionicons
           name={isHugged ? "heart" : "heart-outline"}
           size={24}
-          color={isHugged ? "red" : "red"}
+          color={isHugged ? palette.HEART_ACTIVE : palette.HEART_INACTIVE}
         />
         <Text>{count}</Text>
       </View>
@@ -40,21 +41,13 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     alignItems: "center",
-    // backgroundColor: "#fa9d9d",
+    backgroundColor: palette.PRIMARY,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
     padding: 10,
   },
-  button_active: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fa9d9d",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-  },
+
   contentContainer: {
     flexDirection: "row",
     alignItems: "center",

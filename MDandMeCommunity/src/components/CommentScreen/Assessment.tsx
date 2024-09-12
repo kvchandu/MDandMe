@@ -14,7 +14,7 @@ const Assessment = ({ assessment }: AssessmentProps) => {
   }, [assessment]);
 
   return (
-    <View>
+    <View style={styles.container}>
       {/* <Text style={styles.container}>{assessment}</Text> */}
 
       {sections?.map((item, index) => (
@@ -25,7 +25,13 @@ const Assessment = ({ assessment }: AssessmentProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: { marginTop: 15, marginBottom: 15, borderWidth: 3 },
+  container: {
+    marginTop: 15,
+    marginBottom: 15,
+    // borderWidth: 3,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
 });
 
 export default Assessment;

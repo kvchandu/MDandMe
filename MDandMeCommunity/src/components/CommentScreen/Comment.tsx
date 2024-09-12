@@ -8,6 +8,7 @@ import {
   Button,
 } from "react-native";
 import { CommentData } from "../../types/CommentData";
+import { getRelativeTime } from "../../helpers";
 
 type CommentProps = {
   postUrl: string;
@@ -96,7 +97,7 @@ const Comment = ({
             <>
               <Text style={styles.commentText}>{comment.text}</Text>
               <Text style={styles.timestamp}>
-                {new Date(comment.created_at).toLocaleString()}
+                {getRelativeTime(comment.created_at)}
               </Text>
             </>
           )}

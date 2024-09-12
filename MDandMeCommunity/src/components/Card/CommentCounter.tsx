@@ -1,6 +1,7 @@
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
+import palette from "../../assets/colors";
 
 type CommentCounterProps = {
   initialCount: number;
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     alignItems: "center",
-    // backgroundColor: "#fa9d9d",
+    backgroundColor: palette.PRIMARY,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,

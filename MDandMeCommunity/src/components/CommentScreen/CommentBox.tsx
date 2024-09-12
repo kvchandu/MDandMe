@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, Text } from "react-native";
 import Comment from "./Comment";
 import { CommentData } from "../../types/CommentData";
 
@@ -39,7 +39,17 @@ const CommentBox = ({ initialComments, postUrl }: CommentBoxProps) => {
   };
 
   return (
-    <ScrollView style={styles.container}>{renderComments(null, 0)}</ScrollView>
+    <ScrollView style={styles.container}>
+      {Object.keys(comments).length === 0 ? (
+        <View style={styles.emptyStateContainer}>
+          <Text style={styles.emptyStateText}>
+            There are no comments yet. Be the first to start a discussion!
+          </Text>
+        </View>
+      ) : (
+        renderComments(null, 0)
+      )}
+    </ScrollView>
   );
 };
 
@@ -47,6 +57,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#666",
   },
 });
 

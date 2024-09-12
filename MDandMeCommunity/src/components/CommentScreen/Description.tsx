@@ -1,5 +1,6 @@
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
+import palette from "../../assets/colors";
 
 type DescriptionProps = {
   description: string;
@@ -38,8 +39,10 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 15,
     marginBottom: 15,
-    borderWidth: 3,
+    // borderWidth: 3,
     padding: 10,
+    backgroundColor: palette.SECONDARY,
+    borderRadius: 10,
   },
   description: {
     fontSize: 17,

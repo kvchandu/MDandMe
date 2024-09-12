@@ -7,6 +7,7 @@ import HugCounter from "../Card/HugCounter";
 import Description from "./Description";
 import Assessment from "./Assessment";
 import CommentBox from "./CommentBox";
+import palette from "../../assets/colors";
 
 type CommentSectionRouteProp = RouteProp<RootStackParamList, "Comments">;
 
@@ -61,21 +62,23 @@ const CommentSection = ({ route }: CommentSectionProps) => {
   };
 
   return (
-    <ScrollView>
-      <Text style={styles.title}>
-        {postData ? postData["title"] : "No Data Found"}
-      </Text>
+    <ScrollView style={styles.container}>
+      <View style={styles.postContainer}>
+        <Text style={styles.title}>
+          {postData ? postData["title"] : "No Data Found"}
+        </Text>
 
-      <Description
-        description={postData ? postData["patient_description"] : ""}
-      />
-      <View style={styles.buttonRow}>
-        <HugCounter
-          initialCount={postData ? postData["num_hugs"] : 0}
-          hugStatus={initialIsHugged}
-          onHug={handleHug}
+        <Description
+          description={postData ? postData["patient_description"] : ""}
         />
-        <Text>Share Button</Text>
+        <View style={styles.buttonRow}>
+          <HugCounter
+            initialCount={postData ? postData["num_hugs"] : 0}
+            hugStatus={initialIsHugged}
+            onHug={handleHug}
+          />
+          <Text>Share Button</Text>
+        </View>
       </View>
 
       <Assessment assessment={postData ? postData["assessment"] : ""} />
@@ -88,8 +91,16 @@ const CommentSection = ({ route }: CommentSectionProps) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    backgroundColor: palette.BACKGROUND,
+  },
   title: {
     fontSize: 35,
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: palette.SECONDARY,
+    padding: 5,
   },
   description: {
     marginTop: 15,
@@ -106,6 +117,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
+  },
+  postContainer: {
+    backgroundColor: palette.PRIMARY,
+    padding: 10,
+    borderRadius: 10,
   },
 });
 

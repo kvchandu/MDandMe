@@ -7,6 +7,7 @@ import {
   useFocusEffect,
   useIsFocused,
 } from "@react-navigation/native";
+import palette from "../assets/colors";
 
 const PostList = () => {
   const navigation = useNavigation();
@@ -160,7 +161,7 @@ const PostList = () => {
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: "#75746f",
+    backgroundColor: palette.BACKGROUND,
   },
   listContainer: { paddingVertical: 20, paddingHorizontal: 5 },
   separator: {

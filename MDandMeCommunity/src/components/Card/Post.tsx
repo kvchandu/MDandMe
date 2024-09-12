@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
 import HugCounter from "./HugCounter";
 import { useState } from "react";
 import CommentCounter from "./CommentCounter";
+import palette from "../../assets/colors";
+import { getRelativeTime } from "../../helpers";
 
 type PostProps = {
   post_url: string;
@@ -80,6 +82,7 @@ const Post = ({
             initialCount={num_comments}
             onCommentClick={handleCommentClick}
           />
+          <Text>{getRelativeTime(created_at)}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -89,19 +92,20 @@ const Post = ({
 const styles = StyleSheet.create({
   container: {
     padding: 15,
-    borderWidth: 2,
-    borderRadius: 5,
-    backgroundColor: "#fff",
-    // borderBottomWidth: 1,
-    // borderBottomColor: "#ccc",
+    // borderWidth: 2,
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: palette.SECONDARY,
   },
   title: {
     fontSize: 23,
     fontWeight: "bold",
     marginBottom: 8,
-    borderWidth: 1,
-    borderRadius: 5,
+    // borderWidth: 1,
+    borderRadius: 10,
+    overflow: "hidden",
     padding: 5,
+    backgroundColor: palette.PRIMARY,
   },
   date: {
     fontSize: 12,
@@ -115,9 +119,11 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 15,
-    borderWidth: 1,
-    borderRadius: 5,
+    // borderWidth: 1,
+    borderRadius: 10,
+    overflow: "hidden",
     padding: 5,
+    backgroundColor: palette.PRIMARY,
   },
   bottomRow: {
     flexDirection: "row",
@@ -131,7 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   fullAssessmentButton: {
-    // backgroundColor: "#007AFF",
+    backgroundColor: palette.PRIMARY,
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
