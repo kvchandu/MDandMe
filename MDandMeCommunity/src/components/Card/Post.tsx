@@ -59,9 +59,17 @@ const Post = ({
         <Text style={styles.description}>
           {isExpanded ? patient_description : previewText}
         </Text>
-        <Text style={styles.expandButton}>
-          {isExpanded ? "Show less" : "Read more"}
-        </Text>
+        <Text style={styles.expandButton}>{isExpanded ? "" : "Read more"}</Text>
+        {isExpanded && (
+          <TouchableOpacity
+            style={styles.fullAssessmentButton}
+            onPress={handleCommentClick}
+          >
+            <Text style={styles.fullAssessmentButtonText}>
+              View Full Assessment
+            </Text>
+          </TouchableOpacity>
+        )}
         <View style={styles.bottomRow}>
           <HugCounter
             initialCount={num_hugs}
@@ -88,9 +96,12 @@ const styles = StyleSheet.create({
     // borderBottomColor: "#ccc",
   },
   title: {
-    fontSize: 18,
+    fontSize: 23,
     fontWeight: "bold",
     marginBottom: 8,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
   },
   date: {
     fontSize: 12,
@@ -103,7 +114,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   description: {
-    fontSize: 14,
+    fontSize: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
   },
   bottomRow: {
     flexDirection: "row",
@@ -113,7 +127,22 @@ const styles = StyleSheet.create({
   expandButton: {
     color: "blue",
     marginTop: 5,
-    textAlign: "right",
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  fullAssessmentButton: {
+    // backgroundColor: "#007AFF",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: "center",
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  fullAssessmentButtonText: {
+    color: "black",
+    fontWeight: "bold",
   },
 });
 

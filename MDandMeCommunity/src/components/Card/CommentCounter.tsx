@@ -22,16 +22,29 @@ const CommentCounter = ({
   }, [initialCount]);
 
   return (
-    <TouchableOpacity style={[styles.container]} onPress={handleClick}>
-      <Feather name="message-square" size={24} color="black" />
-      <Text>{count}</Text>
+    <TouchableOpacity style={[styles.button]} onPress={handleClick}>
+      <View style={styles.container}>
+        <Feather name="message-square" size={24} color="black" />
+        <Text>{count} Comments</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    // backgroundColor: "#fa9d9d",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+  },
   container: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    width: 110,
   },
   count: {
     marginLeft: 5,

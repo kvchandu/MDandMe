@@ -24,24 +24,45 @@ const HugCounter = ({ initialCount, hugStatus, onHug }: HugCounterProps) => {
   }, [initialCount]);
 
   return (
-    <TouchableOpacity style={[styles.container]} onPress={handleHug}>
-      <Ionicons
-        name={isHugged ? "heart" : "heart-outline"}
-        size={24}
-        color={isHugged ? "red" : "black"}
-      />
-
-      <Text>{count}</Text>
+    <TouchableOpacity style={styles.button} onPress={handleHug}>
+      <View style={styles.contentContainer}>
+        <Ionicons
+          name={isHugged ? "heart" : "heart-outline"}
+          size={24}
+          color={isHugged ? "red" : "red"}
+        />
+        <Text>{count}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
-  container: {
+  button: {
     flexDirection: "row",
     alignItems: "center",
+    // backgroundColor: "#fa9d9d",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+  },
+  button_active: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fa9d9d",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+  },
+  contentContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: 50,
   },
   count: {
-    marginLeft: 5,
+    marginLeft: 15,
     fontSize: 16,
   },
 });
