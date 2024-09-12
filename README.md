@@ -32,6 +32,13 @@ In the MDandMeCommunity directory run:
 ```
 Start the Application using: 
 ```
+  npx expo start
+```
+
+<video src='demo.mp4' width=180/>
+
+
+
   npx expo start 
 ```
 and select the iOS simulator.
