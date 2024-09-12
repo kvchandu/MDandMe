@@ -51,13 +51,6 @@ const Post = ({
     <TouchableOpacity onPress={toggleExpand}>
       <View style={styles.container}>
         <Text style={styles.title}>{title}</Text>
-        {/* <Text style={styles.date}>
-        {new Date(created_at).toLocaleDateString()}
-      </Text>
-      <Text style={styles.hugs}>Hugs: {num_hugs}</Text> */}
-        {/* <Text style={styles.description} numberOfLines={3}>
-          {patient_description}
-        </Text> */}
         <Text style={styles.description}>
           {isExpanded ? patient_description : previewText}
         </Text>
@@ -133,7 +126,7 @@ const styles = StyleSheet.create({
   expandButton: {
     color: "blue",
     marginTop: 5,
-    textAlign: "center",
+    textAlign: "right",
     marginBottom: 5,
   },
   fullAssessmentButton: {

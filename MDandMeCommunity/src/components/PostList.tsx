@@ -1,5 +1,5 @@
 import Post from "./Card/Post";
-import { FlatList, Text, View, StyleSheet } from "react-native";
+import { FlatList, Text, View, StyleSheet, Image } from "react-native";
 import { PostItem } from "../types/PostItem";
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -19,9 +19,7 @@ const PostList = () => {
   const [lastViewedPostUrl, setLastViewedPostUrl] = useState<string | null>(
     null
   );
-  const [lastViewedNumHugs, setLastViewedNumHugs] = useState<number | null>(
-    null
-  );
+
   const isFocused = useIsFocused();
 
   const API_URL = "http://0.0.0.0:8000";
@@ -62,11 +60,6 @@ const PostList = () => {
     return post ? post.is_hugged : false;
   };
 
-  const getNumHugs = (post_url: string): number => {
-    const post = data.find((item) => item.post_url === post_url);
-    return post ? post.num_hugs : null;
-  };
-
   const navigateToComment = (post_url: string) => {
     setLastViewedPostUrl(post_url);
 
@@ -89,9 +82,6 @@ const PostList = () => {
       )
     );
 
-    console.log("Is Hugged Status in Handle Hug: ", isHugged);
-
-    // Send update to server
     try {
       const response = await fetch(`${API_URL}/items/hug`, {
         method: "POST",
@@ -105,7 +95,6 @@ const PostList = () => {
       }
     } catch (error) {
       console.error("Error updating hug count:", error);
-      // Optionally, revert the local state change if the server update fails
     }
   };
 
@@ -126,6 +115,16 @@ const PostList = () => {
       setLoading(false);
     }
   };
+
+  const renderHeader = () => (
+    <View style={styles.headerContainer}>
+      <Image
+        source={require("../assets/mdmelogo.png")}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+    </View>
+  );
 
   const _renderItem = ({ item }: { item: PostItem }) => (
     <View style={styles.itemContainer}>
@@ -155,6 +154,7 @@ const PostList = () => {
       onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparator}
       contentContainerStyle={styles.listContainer}
+      ListHeaderComponent={renderHeader}
     />
   );
 };
@@ -165,11 +165,21 @@ const styles = StyleSheet.create({
   },
   listContainer: { paddingVertical: 20, paddingHorizontal: 5 },
   separator: {
-    height: 10, // Height of the separator
+    height: 10,
     backgroundColor: "transparent",
   },
   itemContainer: {
     marginBottom: 5,
+  },
+  headerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 20,
+    backgroundColor: palette.BACKGROUND,
+  },
+  logo: {
+    width: 150,
+    height: 50,
   },
 });
 export default PostList;

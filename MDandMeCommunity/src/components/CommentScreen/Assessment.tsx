@@ -15,8 +15,6 @@ const Assessment = ({ assessment }: AssessmentProps) => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.container}>{assessment}</Text> */}
-
       {sections?.map((item, index) => (
         <AssessmentSection key={index} text={item}></AssessmentSection>
       ))}

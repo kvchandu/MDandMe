@@ -9,17 +9,17 @@ import Assessment from "./Assessment";
 import CommentBox from "./CommentBox";
 import palette from "../../assets/colors";
 
-type CommentSectionRouteProp = RouteProp<RootStackParamList, "Comments">;
+type AssessmentScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
 
-type CommentSectionProps = {
-  route: CommentSectionRouteProp;
+type AssessmentScreenProps = {
+  route: AssessmentScreenRouteProp;
 };
 
-const CommentSection = ({ route }: CommentSectionProps) => {
+const AssessmentScreen = ({ route }: AssessmentScreenProps) => {
   const API_URL = "http://0.0.0.0:8000";
 
   const [postData, setPostData] = useState<PostItem>();
-  const { post_url, initialIsHugged, onHugStatusChange } = route.params;
+  const { post_url, initialIsHugged } = route.params;
 
   console.log(postData ? typeof postData["comments"] : "None");
   // console.log("Hug Status in Comment Section", initialIsHugged);
@@ -125,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommentSection;
+export default AssessmentScreen;

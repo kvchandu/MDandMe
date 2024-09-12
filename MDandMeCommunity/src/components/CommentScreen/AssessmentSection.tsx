@@ -35,11 +35,8 @@ const AssessmentSection = ({ text }: AssessmentSectionProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    // marginTop: 15,
-    // marginBottom: 15,
-    // borderWidth: 3,
-    padding: 10,
-    // borderRadius: 10,
+    paddingTop: 10,
+    paddingHorizontal: 10,
     backgroundColor: palette.PRIMARY,
   },
   heading: {
@@ -52,6 +49,7 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 17,
+    marginBottom: 15,
   },
 });
 

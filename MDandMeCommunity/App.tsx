@@ -1,10 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import PostList from "./src/components/PostList";
-import CommentSection from "./src/components/CommentScreen/CommentSection";
+import AssessmentScreen from "./src/components/CommentScreen/AssessmentScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import HugStatusProvider from "./src/context/HugStatusContext";
 export type RootStackParamList = {
   Home: undefined;
   Comments: {
@@ -17,16 +17,18 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={PostList}
-          options={{ title: "Community" }}
-        />
-        <Stack.Screen name="Comments" component={CommentSection} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <HugStatusProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={PostList}
+            options={{ title: "Community" }}
+          />
+          <Stack.Screen name="Comments" component={AssessmentScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </HugStatusProvider>
   );
 }
 
