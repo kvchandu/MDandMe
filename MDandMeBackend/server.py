@@ -1,3 +1,4 @@
+from datetime import datetime
 from http.client import HTTPException
 from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
@@ -11,6 +12,14 @@ JSON_FILE = "data.json"
 class HugUpdate(BaseModel):
     post_url: str
     num_hugs: int
+
+
+class CommentCreate(BaseModel):
+    # post_id: str
+    post_url: str
+    parent_id: int
+    display_name: str
+    text: str
 
 
 async def read_data():
@@ -67,6 +76,47 @@ async def get_items(
             "items_per_page": items_per_page,
         }
     )
+
+
+@app.get("/get-post")
+async def get_post(post_url: str):
+    print("POST URL", post_url)
+    data = await read_data()
+    for item in data:
+
+        if item["post_url"] == post_url:
+            print(item)
+            return item
+
+
+@app.post("/add-comment")
+async def add_comment(comment: CommentCreate):
+    print("Here", comment.parent_id)
+    try:
+        data = await read_data()
+        for item in data:
+            if item["post_url"] == comment.post_url:
+                if "comments" not in item:
+                    item["comments"] = {}
+                new_comment_id = (
+                    max([int(k) for k in item["comments"].keys()] + [0]) + 1
+                )
+                item["comments"][str(new_comment_id)] = {
+                    "id": new_comment_id,
+                    "parent_id": None if comment.parent_id == 0 else comment.parent_id,
+                    "display_name": comment.display_name,
+                    "text": comment.text,
+                    "created_at": datetime.now().isoformat(),
+                }
+                await write_data(data)
+                return {
+                    "message": "Comment added successfully",
+                    "comment_id": new_comment_id,
+                }
+        raise HTTPException(status_code=404, detail="Post not found")
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":
