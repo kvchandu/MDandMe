@@ -23,9 +23,9 @@ Frontend:
 Tested on a iOS Simulator.
 
 Install Expo CLI using: 
-
+```
   npm install -g expo-cli
-
+```
 In the MDandMeCommunity directory run: 
 
   npm install
